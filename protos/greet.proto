@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+	// Unary
+	rpc SayHello (HelloRequest) returns (HelloReply);
+
+	// Server Streaming
+	rpc ParrotSaysHello (HelloRequest) returns (stream HelloReply);
+	
+	// Client Streaming
+	rpc ChattyClientSaysHello (stream HelloRequest) returns (DelayedReply);
+
+	// Both Streaming
+	rpc InteractingHello (stream HelloRequest) returns (stream HelloReply);
+
+	// CheckIn (Solo)
+	rpc CheckIn (CheckInRequest) returns (CheckResponse);
+	
+	// CheckOut (Solo)
+	rpc CheckOut (CheckOutRequest) returns (CheckResponse);
+
+	// Add Group
+	rpc AddGroup (stream AddGroupRequest) returns (stream CheckResponse);
+
+	// Delete Group
+	rpc DeleteGroup (DeleteGroupRequest) returns (CheckResponse);
+	
+	// CheckIn Group
+	rpc CheckInGroup (CheckInGroupRequest) returns (CheckResponse);
+
+	// CheckOut Group
+	rpc CheckOutGroup (CheckOutGroupRequest) returns (CheckResponse);
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+  string greeting = 2;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+message DelayedReply {
+	string message = 1;
+	repeated HelloRequest request = 2;
+}
+
+message CheckInRequest {
+	string nric = 1;
+	string date = 2;
+	string location = 3;
+}
+
+message CheckOutRequest {
+	string nric = 1;
+	string date = 2;
+}
+
+message CheckResponse {
+	string message = 1;
+}
+
+message AddGroupRequest {
+	string nric = 1;
+	string nricMember = 2;
+}
+
+message DeleteGroupRequest {
+	string nric = 1;
+}
+
+message CheckInGroupRequest {
+	string nric = 1;
+	string date = 2;
+	string location = 3;
+}
+
+message CheckOutGroupRequest {
+	string nric = 1;
+	string date = 2;
+}

@@ -1,0 +1,19 @@
+S9606756I, 2022-06-20 21:15:23, Woodlands Road, 2022-06-21 00:00:37, -
+S9062356I, 2022-06-20 21:17:23, Woodlands Road, checkoutDT, -
+S9123752A, 2022-06-20 21:19:53, Woodlands Road, checkoutDT, -
+S9213854B, 2022-06-20 21:21:23, Woodlands Road, checkoutDT, -
+S9606756I, 2022-06-20 21:23:52, Woodlands Road, 2022-06-21 00:00:37, -
+S8236236A, 2022-06-20 21:25:12, Woodlands Road, checkoutDT, -
+S8758236A, 2022-06-20 21:35:13, Roaws Road, checkoutDT, -
+S9682386A, 2022-06-20 21:45:53, Causeway Point, checkoutDT, -
+S9682396A, 2022-06-20 22:19:23, Sembawang Mall, 2022-06-21 00:25:47, -
+S6820936A, 2022-06-20 22:26:19, Temaesek Polytechnic, checkoutDT, -
+S5823862A, 2022-06-20 22:27:12, Temasek Polytechnic, checkoutDT, -
+S8682396F, 2022-06-20 22:28:39, Tama Mall, checkoutDT, -
+S8692369A, 2022-06-20 22:30:29, Tase Road, checkoutDT, -
+S8692369A, 2022-06-20 22:30:35, JDuae, checkoutDT, -
+S8692369A, 2022-06-20 22:30:44, Tennis Court, checkoutDT, -
+S6823907G, 2022-06-20 22:45:15, Roman Temple, checkoutDT, -
+S9606756I, 2022-06-20 22:46:17, Thomas Plaza, 2022-06-21 00:00:37, -
+S9606756I, 2022-06-20 22:46:34, Universal Studio, 2022-06-21 00:00:37, -
+S9606756I, 2022-06-20 23:16:34, RailRoad, 2022-06-21 00:00:37, -
