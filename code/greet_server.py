@@ -1,6 +1,7 @@
 from concurrent import futures
 import os
 import time
+from turtle import update
 
 import grpc
 import greet_pb2
@@ -122,6 +123,64 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
         delete_group_reply = greet_pb2.CheckResponse()
         delete_group_reply.message = deleteGroupMessage
         return delete_group_reply
+
+    def CheckInGroup (self, request, context):
+        print("Group Check In Details:")
+        print(request)
+        currentfile = "group/" + request.nric + "_Group.txt"
+        print(currentfile)
+        print(request.nric)
+
+        if os.path.exists(currentfile):
+            f = open("safeentry.txt", "a")
+            with open(currentfile) as fp:
+                for line in fp:
+                    f.write("\n")
+                    checkInGroupMessage = line.strip()  + ", " + request.date + ", " + request.location
+                    print(checkInGroupMessage)
+                    f.write(checkInGroupMessage + ", checkoutDT, " + request.nric + "_Group")
+
+            f.close()
+        else:
+            checkInGroupMessage = "NRIC Group does not exists!"
+        
+        check_in_group_reply = greet_pb2.CheckResponse()
+        check_in_group_reply.message = checkInGroupMessage
+        return check_in_group_reply
+    
+    def CheckOutGroup (self, request, context):
+        print("Group Check Out Details:")
+        print(request)
+        tempfile = 'temp.txt'
+        currentfile = 'safeentry.txt'
+        nricfile = "group/" + request.nric + "_Group.txt"
+
+        if os.path.exists(nricfile):
+            f = open(tempfile, "a")
+            with open(nricfile) as nr, open(currentfile) as fp:
+                for nricline in nr:
+                    for line in fp:
+                        print(line.split(",")[0].strip() + ":" + nricline.strip())
+                        print(line.split(",")[4].strip() + ":" + nricline.strip() + "_Group")
+                        print("\n")
+                        if  (line.split(",")[3].strip() == "checkoutDT" and line.split(",")[4].strip() == nricline.strip()+ "_Group"):
+                            updatedLine = line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + line.split(",")[2].strip() + ", " + request.date + ", " + line.split(",")[4].strip()
+                            print(updatedLine)
+                            f.write(updatedLine + "\n")
+                        else:
+                            f.write(line)
+                
+            f.close()
+            os.remove(currentfile)
+            os.rename(tempfile, currentfile)
+            checkOutGroupMessage = request.nric + " Group CheckOut completed!"
+        else:
+            checkOutGroupMessage = "NRIC Group does not exists!"
+    
+        
+        check_out_group_reply = greet_pb2.CheckResponse()
+        check_out_group_reply.message = checkOutGroupMessage
+        return check_out_group_reply
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

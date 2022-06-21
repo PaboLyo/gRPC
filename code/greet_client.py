@@ -138,10 +138,36 @@ def checkOut(stub, nric_call):
 
 
 def checkInGroup(stub, nric_call):
-    pass
+    print("Enter check-in location (Group):")
+    destination = input("")
+    while destination == "":
+        destination = input("Please enter a valid location: ")
+    today = datetime.now()
+    today = today.strftime("%Y-%m-%d %H:%M:%S")
+    
+    check_in_group_request = greet_pb2.CheckInGroupRequest(nric = nric_call, date = today, location= destination)
+    check_in_group_reply = stub.CheckInGroup(check_in_group_request)
+    print("Group CheckIn Data Received:")
+    print(check_in_group_reply)
+    checkExit = input ("Enter 'Y' to return to main menu: ")
+    while checkExit == "":
+        checkExit = input("Please enter a valid input: ")
+    if checkExit.upper() == "Y":
+        UsersMode(stub, nric_call)
 
 def checkOutGroup(stub, nric_call):
-    pass
+    today = datetime.now()
+    today = today.strftime("%Y-%m-%d %H:%M:%S")
+    
+    check_out_group_request = greet_pb2.CheckOutGroupRequest(nric = nric_call, date = today)
+    check_ou_group_reply = stub.CheckOutGroup(check_out_group_request)
+    print("Group CheckOut Data Received:")
+    print(check_ou_group_reply)
+    checkExit = input ("Enter 'Y' to return to main menu: ")
+    while checkExit == "":
+        checkExit = input("Please enter a valid input: ")
+    if checkExit.upper() == "Y":
+        UsersMode(stub, nric_call)
 
 def manageGroupInfo(stub, nric_call):
     print("------- Manage SafeEntry Group -------")
