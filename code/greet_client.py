@@ -83,26 +83,33 @@ def UsersMode(stub, nric_call):
                 print("InteractingHello Response Received: ")
                 print(response)
         
+        # Calls the checkIn stub (Individual)
         elif rpc_call == "5":
             checkIn(stub, nric_call)
         
+        # Calls the checkOut stub (Individual)
         elif rpc_call == "6":
             checkOut(stub, nric_call)
 
+        # Calls the checkIn stub (Group)
         elif rpc_call == "7":
             checkInGroup(stub, nric_call)
         
+        # Calls the checkOut stub (Group)
         elif rpc_call == "8":
             checkOutGroup(stub, nric_call)
         
+        # Calls the manageGroupInfo stub (Manages the group settings)
         elif rpc_call == "9":
             manageGroupInfo(stub, nric_call)
-            
+
+        # Calls the viewAllRecords which calls up all the saved history based on the NRIC    
         elif rpc_call == "10":
             viewAllRecords(stub, nric_call)
 
 def StaffsMode(stub):
     pass
+    # Insert Staff UI which is just adding infected location and date
 
 def checkIn(stub, nric_call):
     print("Enter check-in location:")
