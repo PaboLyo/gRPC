@@ -65,6 +65,16 @@ class GreeterStub(object):
                 request_serializer=greet__pb2.CheckOutGroupRequest.SerializeToString,
                 response_deserializer=greet__pb2.CheckResponse.FromString,
                 )
+        self.DeclareLocation = channel.unary_unary(
+                '/greet.Greeter/DeclareLocation',
+                request_serializer=greet__pb2.LocationDetails.SerializeToString,
+                response_deserializer=greet__pb2.CheckResponse.FromString,
+                )
+        self.ExposurePoll = channel.unary_unary(
+                '/greet.Greeter/ExposurePoll',
+                request_serializer=greet__pb2.NRIC.SerializeToString,
+                response_deserializer=greet__pb2.CheckResponse.FromString,
+                )
 
 
 class GreeterServicer(object):
@@ -141,6 +151,20 @@ class GreeterServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeclareLocation(self, request, context):
+        """Declare Locaion
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ExposurePoll(self, request, context):
+        """Client Poll For Exposure Alert
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_GreeterServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -192,6 +216,16 @@ def add_GreeterServicer_to_server(servicer, server):
             'CheckOutGroup': grpc.unary_unary_rpc_method_handler(
                     servicer.CheckOutGroup,
                     request_deserializer=greet__pb2.CheckOutGroupRequest.FromString,
+                    response_serializer=greet__pb2.CheckResponse.SerializeToString,
+            ),
+            'DeclareLocation': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeclareLocation,
+                    request_deserializer=greet__pb2.LocationDetails.FromString,
+                    response_serializer=greet__pb2.CheckResponse.SerializeToString,
+            ),
+            'ExposurePoll': grpc.unary_unary_rpc_method_handler(
+                    servicer.ExposurePoll,
+                    request_deserializer=greet__pb2.NRIC.FromString,
                     response_serializer=greet__pb2.CheckResponse.SerializeToString,
             ),
     }
@@ -371,6 +405,40 @@ class Greeter(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/greet.Greeter/CheckOutGroup',
             greet__pb2.CheckOutGroupRequest.SerializeToString,
+            greet__pb2.CheckResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeclareLocation(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/greet.Greeter/DeclareLocation',
+            greet__pb2.LocationDetails.SerializeToString,
+            greet__pb2.CheckResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ExposurePoll(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/greet.Greeter/ExposurePoll',
+            greet__pb2.NRIC.SerializeToString,
             greet__pb2.CheckResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

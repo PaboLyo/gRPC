@@ -1,10 +1,12 @@
 import os
-from tabnanny import check
+# from tabnanny import check
 import greet_pb2_grpc
 import greet_pb2
 import time
 import grpc
 from datetime import datetime
+import threading
+
 
 def get_client_stream_requests():
     while True:
@@ -13,9 +15,10 @@ def get_client_stream_requests():
         if name == "":
             break
 
-        hello_request = greet_pb2.HelloRequest(greeting = "Hello", name = name)
+        hello_request = greet_pb2.HelloRequest(greeting="Hello", name=name)
         yield hello_request
         time.sleep(1)
+
 
 def run():
     with grpc.insecure_channel('localhost:50051') as channel:
@@ -32,6 +35,7 @@ def run():
             print("-----------------------")
             nric_call = input("Enter NRIC: ")
             print("-----------------------")
+            threading.Thread(target=checkExposure, args=(stub, nric_call,)).start()
             UsersMode(stub, nric_call)
 
         elif mmInput == "2":
@@ -40,76 +44,85 @@ def run():
         elif mmInput == "3":
             exit()
 
-           
+
 def UsersMode(stub, nric_call):
-        today = datetime.now()
-        today = today.strftime("%Y-%m-%d %H:%M:%S")
-        print("Current Time: " + today)  # '2018-12-05 22:13:25'
-        print("-----------------------")
-        print("1. SayHello - Unary")
-        print("2. ParrotSaysHello - Server Side Streaming")
-        print("3. ChattyClientSaysHello - Client Side Streaming")
-        print("4. InteractingHello - Both Streaming")
-        print("5. User Check IN")
-        print("6. User Check OUT")
-        print("7. Group Check IN")
-        print("8. Group Check OUT")
-        print("9. Manage Group Info")
-        print("10. View All Records")
-        rpc_call = input("Which rpc would you like to make: ")
-        print("-----------------------")
-        if rpc_call == "1":
-            hello_request = greet_pb2.HelloRequest(greeting = "Bonjour", name = nric_call)
-            hello_reply = stub.SayHello(hello_request)
-            print("SayHello Response Received:")
+    today = datetime.now()
+    today = today.strftime("%Y-%m-%d %H:%M:%S")
+    print("Current Time: " + today)  # '2018-12-05 22:13:25'
+    print("-----------------------")
+    print("1. SayHello - Unary")
+    print("2. ParrotSaysHello - Server Side Streaming")
+    print("3. ChattyClientSaysHello - Client Side Streaming")
+    print("4. InteractingHello - Both Streaming")
+    print("5. User Check IN")
+    print("6. User Check OUT")
+    print("7. Group Check IN")
+    print("8. Group Check OUT")
+    print("9. Manage Group Info")
+    print("10. View All Records")
+    rpc_call = input("Which rpc would you like to make: ")
+    print("-----------------------")
+    if rpc_call == "1":
+        hello_request = greet_pb2.HelloRequest(greeting="Bonjour", name=nric_call)
+        hello_reply = stub.SayHello(hello_request)
+        print("SayHello Response Received:")
+        print(hello_reply)
+
+    elif rpc_call == "2":
+        hello_request = greet_pb2.HelloRequest(greeting="Bonjour", name="YouTube")
+        hello_replies = stub.ParrotSaysHello(hello_request)
+
+        for hello_reply in hello_replies:
+            print("ParrotSaysHello Response Received:")
             print(hello_reply)
+    elif rpc_call == "3":
+        delayed_reply = stub.ChattyClientSaysHello(get_client_stream_requests())
 
-        elif rpc_call == "2":
-            hello_request = greet_pb2.HelloRequest(greeting = "Bonjour", name = "YouTube")
-            hello_replies = stub.ParrotSaysHello(hello_request)
+        print("ChattyClientSaysHello Response Received:")
+        print(delayed_reply)
+    elif rpc_call == "4":
+        responses = stub.InteractingHello(get_client_stream_requests())
 
-            for hello_reply in hello_replies:
-                print("ParrotSaysHello Response Received:")
-                print(hello_reply)
-        elif rpc_call == "3":
-            delayed_reply = stub.ChattyClientSaysHello(get_client_stream_requests())
+        for response in responses:
+            print("InteractingHello Response Received: ")
+            print(response)
 
-            print("ChattyClientSaysHello Response Received:")
-            print(delayed_reply)
-        elif rpc_call == "4":
-            responses = stub.InteractingHello(get_client_stream_requests())
+    # Calls the checkIn stub (Individual)
+    elif rpc_call == "5":
+        checkIn(stub, nric_call)
 
-            for response in responses:
-                print("InteractingHello Response Received: ")
-                print(response)
-        
-        # Calls the checkIn stub (Individual)
-        elif rpc_call == "5":
-            checkIn(stub, nric_call)
-        
-        # Calls the checkOut stub (Individual)
-        elif rpc_call == "6":
-            checkOut(stub, nric_call)
+    # Calls the checkOut stub (Individual)
+    elif rpc_call == "6":
+        checkOut(stub, nric_call)
 
-        # Calls the checkIn stub (Group)
-        elif rpc_call == "7":
-            checkInGroup(stub, nric_call)
-        
-        # Calls the checkOut stub (Group)
-        elif rpc_call == "8":
-            checkOutGroup(stub, nric_call)
-        
-        # Calls the manageGroupInfo stub (Manages the group settings)
-        elif rpc_call == "9":
-            manageGroupInfo(stub, nric_call)
+    # Calls the checkIn stub (Group)
+    elif rpc_call == "7":
+        checkInGroup(stub, nric_call)
 
-        # Calls the viewAllRecords which calls up all the saved history based on the NRIC    
-        elif rpc_call == "10":
-            viewAllRecords(stub, nric_call)
+    # Calls the checkOut stub (Group)
+    elif rpc_call == "8":
+        checkOutGroup(stub, nric_call)
+
+    # Calls the manageGroupInfo stub (Manages the group settings)
+    elif rpc_call == "9":
+        manageGroupInfo(stub, nric_call)
+
+    # Calls the viewAllRecords which calls up all the saved history based on the NRIC
+    elif rpc_call == "10":
+        viewAllRecords(stub, nric_call)
+
 
 def StaffsMode(stub):
-    pass
+    # location = input("COVID visited location")
+    # time = input("visit time")
+    visitInTime = "2022-06-20 00:00:00"
+    visitOutTime = "2022-07-01 00:00:00"
+    visitLocation = "asdf"
+    locationRequest = greet_pb2.LocationDetails(datein=visitInTime, dateout=visitOutTime, location=visitLocation)
+    reply = stub.DeclareLocation(locationRequest)
+    print(reply)
     # Insert Staff UI which is just adding infected location and date
+
 
 def checkIn(stub, nric_call):
     print("Enter check-in location:")
@@ -118,26 +131,27 @@ def checkIn(stub, nric_call):
         destination = input("Please enter a valid location: ")
     today = datetime.now()
     today = today.strftime("%Y-%m-%d %H:%M:%S")
-    
-    check_in_request = greet_pb2.CheckInRequest(nric = nric_call, date = today, location= destination)
+
+    check_in_request = greet_pb2.CheckInRequest(nric=nric_call, date=today, location=destination)
     check_in_reply = stub.CheckIn(check_in_request)
     print("CheckIn Data Received:")
     print(check_in_reply)
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
         UsersMode(stub, nric_call)
 
+
 def checkOut(stub, nric_call):
     today = datetime.now()
     today = today.strftime("%Y-%m-%d %H:%M:%S")
-    
-    check_out_request = greet_pb2.CheckOutRequest(nric = nric_call, date = today)
+
+    check_out_request = greet_pb2.CheckOutRequest(nric=nric_call, date=today)
     check_out_reply = stub.CheckOut(check_out_request)
     print("CheckOut Data Received:")
     print(check_out_reply)
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
@@ -151,30 +165,32 @@ def checkInGroup(stub, nric_call):
         destination = input("Please enter a valid location: ")
     today = datetime.now()
     today = today.strftime("%Y-%m-%d %H:%M:%S")
-    
-    check_in_group_request = greet_pb2.CheckInGroupRequest(nric = nric_call, date = today, location= destination)
+
+    check_in_group_request = greet_pb2.CheckInGroupRequest(nric=nric_call, date=today, location=destination)
     check_in_group_reply = stub.CheckInGroup(check_in_group_request)
     print("Group CheckIn Data Received:")
     print(check_in_group_reply)
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
         UsersMode(stub, nric_call)
 
+
 def checkOutGroup(stub, nric_call):
     today = datetime.now()
     today = today.strftime("%Y-%m-%d %H:%M:%S")
-    
-    check_out_group_request = greet_pb2.CheckOutGroupRequest(nric = nric_call, date = today)
+
+    check_out_group_request = greet_pb2.CheckOutGroupRequest(nric=nric_call, date=today)
     check_ou_group_reply = stub.CheckOutGroup(check_out_group_request)
     print("Group CheckOut Data Received:")
     print(check_ou_group_reply)
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
         UsersMode(stub, nric_call)
+
 
 def manageGroupInfo(stub, nric_call):
     print("------- Manage SafeEntry Group -------")
@@ -193,7 +209,6 @@ def manageGroupInfo(stub, nric_call):
 
         responses = stub.AddGroup(add_group_info(stub, nric_call))
 
-
         for response in responses:
             print("AddGroup Response Received: ")
             print(response)
@@ -210,6 +225,7 @@ def manageGroupInfo(stub, nric_call):
     else:
         exit()
 
+
 def add_group_info(stub, nric_call):
     while True:
         nric_input = input("Please enter a NRIC to be added into group (or nothing to stop chatting): ")
@@ -217,19 +233,20 @@ def add_group_info(stub, nric_call):
         if nric_input == "":
             break
 
-        addgroup_request = greet_pb2.AddGroupRequest(nric = nric_call, nricMember = nric_input)
+        addgroup_request = greet_pb2.AddGroupRequest(nric=nric_call, nricMember=nric_input)
         yield addgroup_request
         time.sleep(1)
 
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
         UsersMode(stub, nric_call)
 
+
 def viewGroupRecords(stub, nric_call):
     groupName = "group/" + nric_call + "_Group.txt"
-    if os.path.exists(groupName): 
+    if os.path.exists(groupName):
         with open(groupName) as fp:
             print("------ SafeEntry Group Members -----")
             print("| NRIC |")
@@ -237,22 +254,24 @@ def viewGroupRecords(stub, nric_call):
                 print(line)
     else:
         print("No group records found on the user")
-    
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+
+    checkExit = input("Enter 'Y' to return to main menu: ")
     if checkExit.upper() == "Y":
-       UsersMode(stub, nric_call)
+        UsersMode(stub, nric_call)
+
 
 def deleteGroupRecords(stub, nric_call):
-    delete_group_request = greet_pb2.DeleteGroupRequest(nric = nric_call)
+    delete_group_request = greet_pb2.DeleteGroupRequest(nric=nric_call)
     delete_group_reply = stub.DeleteGroup(delete_group_request)
 
     print("CheckOut Data Received:")
     print(delete_group_reply)
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+    checkExit = input("Enter 'Y' to return to main menu: ")
     while checkExit == "":
         checkExit = input("Please enter a valid input: ")
     if checkExit.upper() == "Y":
         UsersMode(stub, nric_call)
+
 
 def viewAllRecords(stub, nric_call):
     with open('safeentry.txt') as fp:
@@ -260,11 +279,23 @@ def viewAllRecords(stub, nric_call):
         print("| NRIC | CheckIn DateTime | Location | Checkout DateTime | Group |")
         for line in fp:
             if (line.split(",")[0].strip().casefold() == nric_call.casefold()):
-                print(line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + line.split(",")[2].strip() + ", " + line.split(",")[3].strip() + ", " + line.split(",")[4].strip())
-    
-    checkExit = input ("Enter 'Y' to return to main menu: ")
+                print(line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + line.split(",")[
+                    2].strip() + ", " + line.split(",")[3].strip() + ", " + line.split(",")[4].strip())
+
+    checkExit = input("Enter 'Y' to return to main menu: ")
     if checkExit.upper() == "Y":
-       UsersMode(stub, nric_call)
+        UsersMode(stub, nric_call)
+
+
+def checkExposure(stub, nric_call):
+    while True:
+        pollRequest = greet_pb2.NRIC(nric=nric_call)
+        pollReply = stub.ExposurePoll(pollRequest)
+        if pollReply.message != "":
+            print("\nALERT, YOU HAVE POTENTIALLY BEEN EXPOSED AT THE FOLLOWING INSTANCE(S):")
+            print(pollReply.message)
+            print("\n")
+        time.sleep(5)
 
 if __name__ == "__main__":
     run()

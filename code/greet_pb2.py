@@ -14,10 +14,12 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bgreet.proto\x12\x05greet\".\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08greeting\x18\x02 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"E\n\x0c\x44\x65layedReply\x12\x0f\n\x07message\x18\x01 \x01(\t\x12$\n\x07request\x18\x02 \x03(\x0b\x32\x13.greet.HelloRequest\">\n\x0e\x43heckInRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\"-\n\x0f\x43heckOutRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\" \n\rCheckResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"3\n\x0f\x41\x64\x64GroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x12\n\nnricMember\x18\x02 \x01(\t\"\"\n\x12\x44\x65leteGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\"C\n\x13\x43heckInGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\"2\n\x14\x43heckOutGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t2\xf5\x04\n\x07Greeter\x12\x32\n\x08SayHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\x12;\n\x0fParrotSaysHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply0\x01\x12\x43\n\x15\x43hattyClientSaysHello\x12\x13.greet.HelloRequest\x1a\x13.greet.DelayedReply(\x01\x12>\n\x10InteractingHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply(\x01\x30\x01\x12\x36\n\x07\x43heckIn\x12\x15.greet.CheckInRequest\x1a\x14.greet.CheckResponse\x12\x38\n\x08\x43heckOut\x12\x16.greet.CheckOutRequest\x1a\x14.greet.CheckResponse\x12<\n\x08\x41\x64\x64Group\x12\x16.greet.AddGroupRequest\x1a\x14.greet.CheckResponse(\x01\x30\x01\x12>\n\x0b\x44\x65leteGroup\x12\x19.greet.DeleteGroupRequest\x1a\x14.greet.CheckResponse\x12@\n\x0c\x43heckInGroup\x12\x1a.greet.CheckInGroupRequest\x1a\x14.greet.CheckResponse\x12\x42\n\rCheckOutGroup\x12\x1b.greet.CheckOutGroupRequest\x1a\x14.greet.CheckResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bgreet.proto\x12\x05greet\"\x14\n\x04NRIC\x12\x0c\n\x04nric\x18\x01 \x01(\t\"D\n\x0fLocationDetails\x12\x0e\n\x06\x64\x61tein\x18\x01 \x01(\t\x12\x0f\n\x07\x64\x61teout\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\".\n\x0cHelloRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08greeting\x18\x02 \x01(\t\"\x1d\n\nHelloReply\x12\x0f\n\x07message\x18\x01 \x01(\t\"E\n\x0c\x44\x65layedReply\x12\x0f\n\x07message\x18\x01 \x01(\t\x12$\n\x07request\x18\x02 \x03(\x0b\x32\x13.greet.HelloRequest\">\n\x0e\x43heckInRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\"-\n\x0f\x43heckOutRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\" \n\rCheckResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\"3\n\x0f\x41\x64\x64GroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x12\n\nnricMember\x18\x02 \x01(\t\"\"\n\x12\x44\x65leteGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\"C\n\x13\x43heckInGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t\x12\x10\n\x08location\x18\x03 \x01(\t\"2\n\x14\x43heckOutGroupRequest\x12\x0c\n\x04nric\x18\x01 \x01(\t\x12\x0c\n\x04\x64\x61te\x18\x02 \x01(\t2\xe9\x05\n\x07Greeter\x12\x32\n\x08SayHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\x12;\n\x0fParrotSaysHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply0\x01\x12\x43\n\x15\x43hattyClientSaysHello\x12\x13.greet.HelloRequest\x1a\x13.greet.DelayedReply(\x01\x12>\n\x10InteractingHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply(\x01\x30\x01\x12\x36\n\x07\x43heckIn\x12\x15.greet.CheckInRequest\x1a\x14.greet.CheckResponse\x12\x38\n\x08\x43heckOut\x12\x16.greet.CheckOutRequest\x1a\x14.greet.CheckResponse\x12<\n\x08\x41\x64\x64Group\x12\x16.greet.AddGroupRequest\x1a\x14.greet.CheckResponse(\x01\x30\x01\x12>\n\x0b\x44\x65leteGroup\x12\x19.greet.DeleteGroupRequest\x1a\x14.greet.CheckResponse\x12@\n\x0c\x43heckInGroup\x12\x1a.greet.CheckInGroupRequest\x1a\x14.greet.CheckResponse\x12\x42\n\rCheckOutGroup\x12\x1b.greet.CheckOutGroupRequest\x1a\x14.greet.CheckResponse\x12?\n\x0f\x44\x65\x63lareLocation\x12\x16.greet.LocationDetails\x1a\x14.greet.CheckResponse\x12\x31\n\x0c\x45xposurePoll\x12\x0b.greet.NRIC\x1a\x14.greet.CheckResponseb\x06proto3')
 
 
 
+_NRIC = DESCRIPTOR.message_types_by_name['NRIC']
+_LOCATIONDETAILS = DESCRIPTOR.message_types_by_name['LocationDetails']
 _HELLOREQUEST = DESCRIPTOR.message_types_by_name['HelloRequest']
 _HELLOREPLY = DESCRIPTOR.message_types_by_name['HelloReply']
 _DELAYEDREPLY = DESCRIPTOR.message_types_by_name['DelayedReply']
@@ -28,6 +30,20 @@ _ADDGROUPREQUEST = DESCRIPTOR.message_types_by_name['AddGroupRequest']
 _DELETEGROUPREQUEST = DESCRIPTOR.message_types_by_name['DeleteGroupRequest']
 _CHECKINGROUPREQUEST = DESCRIPTOR.message_types_by_name['CheckInGroupRequest']
 _CHECKOUTGROUPREQUEST = DESCRIPTOR.message_types_by_name['CheckOutGroupRequest']
+NRIC = _reflection.GeneratedProtocolMessageType('NRIC', (_message.Message,), {
+  'DESCRIPTOR' : _NRIC,
+  '__module__' : 'greet_pb2'
+  # @@protoc_insertion_point(class_scope:greet.NRIC)
+  })
+_sym_db.RegisterMessage(NRIC)
+
+LocationDetails = _reflection.GeneratedProtocolMessageType('LocationDetails', (_message.Message,), {
+  'DESCRIPTOR' : _LOCATIONDETAILS,
+  '__module__' : 'greet_pb2'
+  # @@protoc_insertion_point(class_scope:greet.LocationDetails)
+  })
+_sym_db.RegisterMessage(LocationDetails)
+
 HelloRequest = _reflection.GeneratedProtocolMessageType('HelloRequest', (_message.Message,), {
   'DESCRIPTOR' : _HELLOREQUEST,
   '__module__' : 'greet_pb2'
@@ -102,26 +118,30 @@ _GREETER = DESCRIPTOR.services_by_name['Greeter']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _HELLOREQUEST._serialized_start=22
-  _HELLOREQUEST._serialized_end=68
-  _HELLOREPLY._serialized_start=70
-  _HELLOREPLY._serialized_end=99
-  _DELAYEDREPLY._serialized_start=101
-  _DELAYEDREPLY._serialized_end=170
-  _CHECKINREQUEST._serialized_start=172
-  _CHECKINREQUEST._serialized_end=234
-  _CHECKOUTREQUEST._serialized_start=236
-  _CHECKOUTREQUEST._serialized_end=281
-  _CHECKRESPONSE._serialized_start=283
-  _CHECKRESPONSE._serialized_end=315
-  _ADDGROUPREQUEST._serialized_start=317
-  _ADDGROUPREQUEST._serialized_end=368
-  _DELETEGROUPREQUEST._serialized_start=370
-  _DELETEGROUPREQUEST._serialized_end=404
-  _CHECKINGROUPREQUEST._serialized_start=406
-  _CHECKINGROUPREQUEST._serialized_end=473
-  _CHECKOUTGROUPREQUEST._serialized_start=475
-  _CHECKOUTGROUPREQUEST._serialized_end=525
-  _GREETER._serialized_start=528
-  _GREETER._serialized_end=1157
+  _NRIC._serialized_start=22
+  _NRIC._serialized_end=42
+  _LOCATIONDETAILS._serialized_start=44
+  _LOCATIONDETAILS._serialized_end=112
+  _HELLOREQUEST._serialized_start=114
+  _HELLOREQUEST._serialized_end=160
+  _HELLOREPLY._serialized_start=162
+  _HELLOREPLY._serialized_end=191
+  _DELAYEDREPLY._serialized_start=193
+  _DELAYEDREPLY._serialized_end=262
+  _CHECKINREQUEST._serialized_start=264
+  _CHECKINREQUEST._serialized_end=326
+  _CHECKOUTREQUEST._serialized_start=328
+  _CHECKOUTREQUEST._serialized_end=373
+  _CHECKRESPONSE._serialized_start=375
+  _CHECKRESPONSE._serialized_end=407
+  _ADDGROUPREQUEST._serialized_start=409
+  _ADDGROUPREQUEST._serialized_end=460
+  _DELETEGROUPREQUEST._serialized_start=462
+  _DELETEGROUPREQUEST._serialized_end=496
+  _CHECKINGROUPREQUEST._serialized_start=498
+  _CHECKINGROUPREQUEST._serialized_end=565
+  _CHECKOUTGROUPREQUEST._serialized_start=567
+  _CHECKOUTGROUPREQUEST._serialized_end=617
+  _GREETER._serialized_start=620
+  _GREETER._serialized_end=1365
 # @@protoc_insertion_point(module_scope)
