@@ -1,5 +1,6 @@
 from concurrent import futures
 import os
+import sys
 import time
 from turtle import update
 import grpc
@@ -12,44 +13,6 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
 
     def __init__(self):
         self.exposureDict = {}
-
-    def SayHello(self, request, context):
-        print("SayHello Request Made:")
-        print(request)
-        hello_reply = greet_pb2.HelloReply()
-        hello_reply.message = f"{request.greeting} {request.name}"
-
-        return hello_reply
-
-    def ParrotSaysHello(self, request, context):
-        print("ParrotSaysHello Request Made:")
-        print(request)
-
-        for i in range(3):
-            hello_reply = greet_pb2.HelloReply()
-            hello_reply.message = f"{request.greeting} {request.name} {i + 1}"
-            yield hello_reply
-            time.sleep(3)
-
-    def ChattyClientSaysHello(self, request_iterator, context):
-        delayed_reply = greet_pb2.DelayedReply()
-        for request in request_iterator:
-            print("ChattyClientSaysHello Request Made:")
-            print(request)
-            delayed_reply.request.append(request)
-
-        delayed_reply.message = f"You have sent {len(delayed_reply.request)} messages. Please expect a delayed response."
-        return delayed_reply
-
-    def InteractingHello(self, request_iterator, context):
-        for request in request_iterator:
-            print("InteractingHello Request Made:")
-            print(request)
-
-            hello_reply = greet_pb2.HelloReply()
-            hello_reply.message = f"{request.greeting} {request.name}"
-
-            yield hello_reply
 
     def CheckIn(self, request, context):
         print("Check In Details:")
@@ -78,7 +41,7 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
                     3].strip().casefold() == "checkoutDT".casefold() and line.split(",")[4].strip().casefold() == "-"):
                     updatedLine = line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + \
                                   line.split(",")[2].strip() + ", " + request.date + ", " + line.split(",")[4].strip()
-                    f.write(updatedLine + "\n")
+                    f.write(updatedLine)
                 else:
                     f.write(line)
         f.close()
@@ -165,18 +128,16 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
             with open(nricfile) as nr, open(currentfile) as fp:
                 for nricline in nr:
                     for line in fp:
-                        print(line.split(",")[0].strip() + ":" + nricline.strip())
-                        print(line.split(",")[4].strip() + ":" + nricline.strip() + "_Group")
-                        print("\n")
-                        if (line.split(",")[3].strip() == "checkoutDT" and line.split(",")[
-                            4].strip() == nricline.strip() + "_Group"):
-                            updatedLine = line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + \
-                                          line.split(",")[2].strip() + ", " + request.date + ", " + line.split(",")[
-                                              4].strip()
-                            print(updatedLine)
-                            f.write(updatedLine + "\n")
-                        else:
-                            f.write(line)
+                        if not line.isspace():
+                            if (line.split(",")[3].strip() == "checkoutDT" and line.split(",")[
+                                4].strip() == nricline.strip() + "_Group"):
+                                updatedLine = line.split(",")[0].strip() + ", " + line.split(",")[1].strip() + ", " + \
+                                            line.split(",")[2].strip() + ", " + request.date + ", " + line.split(",")[
+                                                4].strip()
+                                print(updatedLine)
+                                f.write(updatedLine + "\n")
+                            else:
+                                f.write(line)
 
             f.close()
             os.remove(currentfile)
@@ -230,6 +191,7 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
                     outDate = None
                 self.determine_period(location, inDate, outDate, visitLocation, visitInDateTime, visitOutDateTime, ic)
             infile.close()
+        print("Possible Exposure:")
         print(self.exposureDict)
         reply = greet_pb2.CheckResponse()
         reply.message = "success"
