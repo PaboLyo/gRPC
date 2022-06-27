@@ -73,11 +73,12 @@ def UsersMode(stub, nric_call):
 
 # Staff Main Menu
 def StaffsMode(stub):
-    # location = input("COVID visited location")
-    # time = input("visit time")
-    visitInTime = "2022-06-20 00:00:00"
-    visitOutTime = "2022-07-01 00:00:00"
-    visitLocation = " Testing"
+    # visitInTime = "2022-06-20 00:00:00"
+    # visitOutTime = "2022-07-01 00:00:00"
+    # visitLocation = " Testing"
+    visitLocation = input("enter covid patient visit location - ")
+    visitInTime = input("enter check in time in following format: yyyy-mm-dd HH:MM:SS - ")
+    visitOutTime = input("enter check out time in following format: yyyy-mm-dd HH:MM:SS - ")
     locationRequest = greet_pb2.LocationDetails(datein=visitInTime, dateout=visitOutTime, location=visitLocation)
     reply = stub.DeclareLocation(locationRequest)
     print("Possible Exposure:")
