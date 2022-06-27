@@ -150,7 +150,7 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
         check_out_group_reply.message = checkOutGroupMessage
         return check_out_group_reply
 
-    def determine_period(self, location, timeIN, timeOut, patientLocation, patientTimeIn, patientTimeOut, NRIC):
+    def determine_period(self, location, timeIN, timeOut, patientLocation, patientTimeIn, patientTimeOut, NRIC, group):
         key = patientLocation + ":" + datetime.datetime.strftime(patientTimeIn, "%Y-%m-%d %H:%M:%S")
         if location == patientLocation:
             if timeOut is not None:
@@ -163,10 +163,22 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
                 # print(delta)
                 if delta >= datetime.timedelta(hours=0, minutes=0, seconds=0):
                     # print("POTENTIAL EXPOSURE")
-                    self.exposureDict.setdefault(key, set()).add(NRIC)
+                    self.AddPotentialExposure(NRIC, key, group)
             elif patientTimeIn <= timeIN <= patientTimeOut:
                 # print("POTENTIAL EXPOSURE")
-                self.exposureDict.setdefault(key, set()).add(NRIC)
+                self.AddPotentialExposure(NRIC, key, group)
+
+    def AddPotentialExposure(self, NRIC, key, group):
+        self.exposureDict.setdefault(key, set()).add(NRIC)
+        if group != " -":
+            try:
+                filepath = "group/" + NRIC + "_Group.txt"
+                with open(filepath) as infile:
+                    group = infile.readlines()
+                    for ic in group:
+                        self.exposureDict.setdefault(key, set().add(ic.rstrip('\n')))
+            except FileNotFoundError:
+                pass
 
     def DeclareLocation(self, request, context):
         print("Declare a location visited by covid patient:")
@@ -184,12 +196,13 @@ class GreeterServicer(greet_pb2_grpc.GreeterServicer):
                 inTimeString = lineList[1]
                 location = lineList[2]
                 outTimeString = lineList[3]
+                group = lineList[4]
                 inDate = datetime.datetime.strptime(inTimeString, " %Y-%m-%d %H:%M:%S")
                 if lineList[3] != " checkoutDT":
                     outDate = datetime.datetime.strptime(outTimeString, " %Y-%m-%d %H:%M:%S")
                 else:
                     outDate = None
-                self.determine_period(location, inDate, outDate, visitLocation, visitInDateTime, visitOutDateTime, ic)
+                self.determine_period(location, inDate, outDate, visitLocation, visitInDateTime, visitOutDateTime, ic, group)
             infile.close()
         print("Possible Exposure:")
         print(self.exposureDict)

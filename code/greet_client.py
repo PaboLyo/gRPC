@@ -77,7 +77,7 @@ def StaffsMode(stub):
     # time = input("visit time")
     visitInTime = "2022-06-20 00:00:00"
     visitOutTime = "2022-07-01 00:00:00"
-    visitLocation = " Tens"
+    visitLocation = " Testing"
     locationRequest = greet_pb2.LocationDetails(datein=visitInTime, dateout=visitOutTime, location=visitLocation)
     reply = stub.DeclareLocation(locationRequest)
     print("Possible Exposure:")
